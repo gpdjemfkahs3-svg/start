@@ -10,6 +10,10 @@ import { Config } from "@remotion/cli/config";
 Config.setRspack(true);
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
-Config.setBrowserExecutable(
-  "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell",
-);
+
+// Only set on sandboxes where Remotion can't download its own browser
+// (blocked network egress). Leave REMOTION_BROWSER_EXECUTABLE unset on a
+// normal machine and Remotion will download/manage the browser itself.
+if (process.env.REMOTION_BROWSER_EXECUTABLE) {
+  Config.setBrowserExecutable(process.env.REMOTION_BROWSER_EXECUTABLE);
+}
